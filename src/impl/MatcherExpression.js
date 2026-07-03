@@ -13,9 +13,7 @@ export class MatcherExpression extends AbstractNode {
 
   apply(scope, input) { return this.expr.apply(scope, input); }
 
-  computeMatchContexts(_parent) {
-    // FIXME (kept from Java): uhhh, the rules here?
-  }
+  computeMatchContexts(_parent) {}
 
   getChildren() { return [this.expr]; }
 

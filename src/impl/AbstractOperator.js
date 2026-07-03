@@ -51,8 +51,4 @@ export class AbstractOperator extends AbstractNode {
     const second = this.right instanceof AbstractOperator ? `(${this.right})` : this.right.toString();
     return `${first} ${this.operator} ${second}`;
   }
-
-  getLeft() { return this.left; }
-  getRight() { return this.right; }
-  getOperator() { return this.operator; }
 }

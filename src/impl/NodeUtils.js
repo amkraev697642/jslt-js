@@ -1,8 +1,6 @@
 // Port of impl/NodeUtils.java — shared eval-time helpers used across the engine.
 
-import {
-  NullNode, BooleanNode, TextNode, ArrayNode, ObjectNode,
-} from "../json/JsonNode.js";
+import { NullNode, BooleanNode, TextNode } from "../json/JsonNode.js";
 import { IntNode, LongNode, BigIntegerNode, DoubleNode } from "../json/NumericNode.js";
 import { mapper } from "../json/mapper.js";
 import { JsltException } from "../JsltException.js";
@@ -34,7 +32,6 @@ export function isValue(value) {
 
 export function toJson(value) {
   if (typeof value === "boolean") return value ? BooleanNode.TRUE : BooleanNode.FALSE;
-  if (typeof value === "number") return new DoubleNode(value);
   throw new Error("toJson: unsupported value " + value);
 }
 

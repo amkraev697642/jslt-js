@@ -17,11 +17,8 @@ export class AbstractInvocationExpression extends AbstractNode {
     this.callable = callable;
     if (this.arguments.length < callable.getMinArguments()
         || this.arguments.length > callable.getMaxArguments()) {
-      // FunctionExpression imports this module, so duck-type instead of an
-      // instanceof check to avoid a circular import.
-      const kind = this.constructor.name === "FunctionExpression" ? "Function" : "Macro";
       throw new JsltException(
-        `${kind} '${callable.getName()}' needs ${callable.getMinArguments()}-` +
+        `${this.kind} '${callable.getName()}' needs ${callable.getMinArguments()}-` +
         `${callable.getMaxArguments()} arguments, got ${this.arguments.length}`,
         this.location,
       );

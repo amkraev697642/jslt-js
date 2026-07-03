@@ -11,9 +11,7 @@ import {
   isTrue, isValue, toJson, toJsonArray, toStringValue, toArray, number as numberFn,
   convertObjectToArray, mapper,
 } from "./NodeUtils.js";
-import {
-  NullNode, BooleanNode, TextNode, ArrayNode, ObjectNode,
-} from "../json/JsonNode.js";
+import { NullNode, BooleanNode, TextNode } from "../json/JsonNode.js";
 import { IntNode, LongNode, DoubleNode } from "../json/NumericNode.js";
 import { readTree } from "../json/mapper.js";
 import { EqualsComparison } from "./EqualsComparison.js";
@@ -100,6 +98,17 @@ class AbstractRegexpFunction extends AbstractFunction {
   regexpArgumentNumber() { return 1; }
 }
 
+// ===== TYPE PREDICATES (is-boolean, is-object, is-array, is-string,
+// is-number, is-integer, is-decimal) — all `toJson(args[0].<method>())`.
+
+class Predicate extends AbstractFunction {
+  constructor(name, method) {
+    super(name, 1, 1);
+    this.method = method;
+  }
+  call(_input, args) { return toJson(args[0][this.method]()); }
+}
+
 // ===== NUMBER
 
 class NumberFn extends AbstractFunction {
@@ -112,33 +121,17 @@ class NumberFn extends AbstractFunction {
 
 // ===== ROUND / FLOOR / CEILING
 
-class Round extends AbstractFunction {
-  constructor() { super("round", 1, 1); }
-  call(_input, args) {
-    const n = args[0];
-    if (n.isNull()) return NullNode.instance;
-    if (!n.isNumber()) throw new JsltException("round() cannot round a non-number: " + n);
-    return new LongNode(BigInt(Math.round(n.doubleValue())));
+// round/floor/ceiling share everything but the name and the Math fn.
+class Rounder extends AbstractFunction {
+  constructor(name, mathFn) {
+    super(name, 1, 1);
+    this.mathFn = mathFn;
   }
-}
-
-class Floor extends AbstractFunction {
-  constructor() { super("floor", 1, 1); }
   call(_input, args) {
     const n = args[0];
     if (n.isNull()) return NullNode.instance;
-    if (!n.isNumber()) throw new JsltException("floor() cannot round a non-number: " + n);
-    return new LongNode(BigInt(Math.floor(n.doubleValue())));
-  }
-}
-
-class Ceiling extends AbstractFunction {
-  constructor() { super("ceiling", 1, 1); }
-  call(_input, args) {
-    const n = args[0];
-    if (n.isNull()) return NullNode.instance;
-    if (!n.isNumber()) throw new JsltException("ceiling() cannot round a non-number: " + n);
-    return new LongNode(BigInt(Math.ceil(n.doubleValue())));
+    if (!n.isNumber()) throw new JsltException(`${this.getName()}() cannot round a non-number: ` + n);
+    return new LongNode(BigInt(this.mathFn(n.doubleValue())));
   }
 }
 
@@ -267,19 +260,15 @@ class Split extends AbstractRegexpFunction {
 
 // ===== LOWERCASE / UPPERCASE
 
-class Lowercase extends AbstractFunction {
-  constructor() { super("lowercase", 1, 1); }
-  call(_input, args) {
-    if (args[0].isNull()) return args[0];
-    return new TextNode(toStringValue(args[0], false).toLowerCase());
+// lowercase/uppercase share everything but which String method to call.
+class CaseConvert extends AbstractFunction {
+  constructor(name, method) {
+    super(name, 1, 1);
+    this.method = method;
   }
-}
-
-class Uppercase extends AbstractFunction {
-  constructor() { super("uppercase", 1, 1); }
   call(_input, args) {
     if (args[0].isNull()) return args[0];
-    return new TextNode(toStringValue(args[0], false).toUpperCase());
+    return new TextNode(toStringValue(args[0], false)[this.method]());
   }
 }
 
@@ -306,11 +295,6 @@ class BooleanFn extends AbstractFunction {
   call(_input, args) { return toJson(isTrue(args[0])); }
 }
 
-class IsBoolean extends AbstractFunction {
-  constructor() { super("is-boolean", 1, 1); }
-  call(_input, args) { return toJson(args[0].isBoolean()); }
-}
-
 // ===== FALLBACK (macro: short-circuits, only evaluates as many args as needed)
 
 class Fallback extends AbstractMacro {
@@ -325,11 +309,6 @@ class Fallback extends AbstractMacro {
 }
 
 // ===== IS-OBJECT / GET-KEY
-
-class IsObject extends AbstractFunction {
-  constructor() { super("is-object", 1, 1); }
-  call(_input, args) { return toJson(args[0].isObject()); }
-}
 
 class GetKey extends AbstractFunction {
   constructor() { super("get-key", 2, 3); }
@@ -349,11 +328,6 @@ class GetKey extends AbstractFunction {
 }
 
 // ===== IS-ARRAY / ARRAY
-
-class IsArray extends AbstractFunction {
-  constructor() { super("is-array", 1, 1); }
-  call(_input, args) { return toJson(args[0].isArray()); }
-}
 
 class ArrayFn extends AbstractFunction {
   constructor() { super("array", 1, 1); }
@@ -473,17 +447,14 @@ class IndexOf extends AbstractFunction {
 
 // ===== STARTS-WITH / ENDS-WITH
 
-class StartsWith extends AbstractFunction {
-  constructor() { super("starts-with", 2, 2); }
-  call(_input, args) {
-    return toJson(toStringValue(args[0], false).startsWith(toStringValue(args[1], false)));
+// starts-with/ends-with share everything but which String method to call.
+class StringEdgeMatch extends AbstractFunction {
+  constructor(name, method) {
+    super(name, 2, 2);
+    this.method = method;
   }
-}
-
-class EndsWith extends AbstractFunction {
-  constructor() { super("ends-with", 2, 2); }
   call(_input, args) {
-    return toJson(toStringValue(args[0], false).endsWith(toStringValue(args[1], false)));
+    return toJson(toStringValue(args[0], false)[this.method](toStringValue(args[1], false)));
   }
 }
 
@@ -690,26 +661,6 @@ class ToString extends AbstractFunction {
     if (args[0].isTextual()) return args[0];
     return new TextNode(args[0].toString());
   }
-}
-
-class IsString extends AbstractFunction {
-  constructor() { super("is-string", 1, 1); }
-  call(_input, args) { return toJson(args[0].isTextual()); }
-}
-
-class IsNumber extends AbstractFunction {
-  constructor() { super("is-number", 1, 1); }
-  call(_input, args) { return toJson(args[0].isNumber()); }
-}
-
-class IsInteger extends AbstractFunction {
-  constructor() { super("is-integer", 1, 1); }
-  call(_input, args) { return toJson(args[0].isIntegralNumber()); }
-}
-
-class IsDecimal extends AbstractFunction {
-  constructor() { super("is-decimal", 1, 1); }
-  call(_input, args) { return toJson(args[0].isFloatingPointNumber()); }
 }
 
 // ===== NOW
@@ -996,29 +947,29 @@ export const BuiltinFunctions = {
     ["min", new Min()],
     ["max", new Max()],
     // NUMERIC
-    ["is-number", new IsNumber()],
-    ["is-integer", new IsInteger()],
-    ["is-decimal", new IsDecimal()],
+    ["is-number", new Predicate("is-number", "isNumber")],
+    ["is-integer", new Predicate("is-integer", "isIntegralNumber")],
+    ["is-decimal", new Predicate("is-decimal", "isFloatingPointNumber")],
     ["number", new NumberFn()],
-    ["round", new Round()],
-    ["floor", new Floor()],
-    ["ceiling", new Ceiling()],
+    ["round", new Rounder("round", Math.round)],
+    ["floor", new Rounder("floor", Math.floor)],
+    ["ceiling", new Rounder("ceiling", Math.ceil)],
     ["random", new Random()],
     ["sum", new Sum()],
     ["mod", new Modulo()],
     ["hash-int", new HashInt()],
     // STRING
-    ["is-string", new IsString()],
+    ["is-string", new Predicate("is-string", "isTextual")],
     ["string", new ToString()],
     ["test", new Test()],
     ["capture", new Capture()],
     ["split", new Split()],
     ["join", new Join()],
-    ["lowercase", new Lowercase()],
-    ["uppercase", new Uppercase()],
+    ["lowercase", new CaseConvert("lowercase", "toLowerCase")],
+    ["uppercase", new CaseConvert("uppercase", "toUpperCase")],
     ["sha256-hex", new Sha256()],
-    ["starts-with", new StartsWith()],
-    ["ends-with", new EndsWith()],
+    ["starts-with", new StringEdgeMatch("starts-with", "startsWith")],
+    ["ends-with", new StringEdgeMatch("ends-with", "endsWith")],
     ["from-json", new FromJson()],
     ["to-json", new ToJson()],
     ["replace", new Replace()],
@@ -1027,13 +978,13 @@ export const BuiltinFunctions = {
     // BOOLEAN
     ["not", new Not()],
     ["boolean", new BooleanFn()],
-    ["is-boolean", new IsBoolean()],
+    ["is-boolean", new Predicate("is-boolean", "isBoolean")],
     // OBJECT
-    ["is-object", new IsObject()],
+    ["is-object", new Predicate("is-object", "isObject")],
     ["get-key", new GetKey()],
     // ARRAY
     ["array", new ArrayFn()],
-    ["is-array", new IsArray()],
+    ["is-array", new Predicate("is-array", "isArray")],
     ["flatten", new Flatten()],
     ["all", new All()],
     ["any", new Any()],

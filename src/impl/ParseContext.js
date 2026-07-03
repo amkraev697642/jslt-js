@@ -27,15 +27,15 @@ export class ParseContext {
     this.preparationContext = preparationContext;
     this.objectFilter = objectFilter;
     this.parent = undefined;
-
-    namedModules.set(EXPERIMENTAL_MODULE_URI, new ExperimentalModule());
   }
 
   // Convenience matching Java's single-arg ParseContext(String source)
   // constructor, minus the classpath resolver (Node-only, deferred — see plan
   // §10). A resolver is only needed if the source actually contains imports.
-  static root(source, { resolver, functions = [] } = {}) {
-    return new ParseContext(functions, source, resolver, new Map(), [], new PreparationContext(), new DefaultJsonFilter());
+  static root(source, { resolver, functions = [], objectFilter = new DefaultJsonFilter() } = {}) {
+    const namedModules = new Map();
+    namedModules.set(EXPERIMENTAL_MODULE_URI, new ExperimentalModule());
+    return new ParseContext(functions, source, resolver, namedModules, [], new PreparationContext(), objectFilter);
   }
 
   setParent(parent) { this.parent = parent; }

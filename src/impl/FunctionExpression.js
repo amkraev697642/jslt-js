@@ -14,6 +14,8 @@ import { BuiltinFunctions, getRegexp } from "./BuiltinFunctions.js";
 const OPTIMIZE_ARRAY_CONTAINS_MIN = 10;
 
 export class FunctionExpression extends AbstractInvocationExpression {
+  kind = "Function"; // used by AbstractInvocationExpression's arity-error message
+
   constructor(name, arguments_, location) {
     super(arguments_, location);
     this.function = undefined; // undefined before resolution
