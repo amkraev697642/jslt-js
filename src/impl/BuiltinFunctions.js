@@ -1,4 +1,4 @@
-import "./cryptoGlobal.js";
+import { randomUUID as cryptoRandomUUID } from "./cryptoGlobal.js";
 
 // Port of impl/BuiltinFunctions.java — all builtin function/macro implementations.
 // Kept as one file, mirroring the original (which deliberately keeps every
@@ -570,7 +570,7 @@ class Uuid extends AbstractFunction {
   call(_input, args) {
     let uuid;
     if (args.length === 0) {
-      uuid = globalThis.crypto.randomUUID();
+      uuid = cryptoRandomUUID();
     } else if (args.length === 2) {
       if (args[0].isNull() && args[1].isNull()) {
         // NIL UUID, RFC 4122 section 4.1.7
