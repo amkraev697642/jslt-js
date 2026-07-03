@@ -1,0 +1,61 @@
+{
+  "name": "jslt-js",
+  "version": "0.1.5",
+  "description": "JavaScript port of Schibsted JSLT — JSON query and transformation language (https://github.com/schibsted/jslt)",
+  "license": "Apache-2.0",
+  "author": "Anton Kraev",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/amkraev697642/jslt-js.git"
+  },
+  "homepage": "https://github.com/amkraev697642/jslt-js#readme",
+  "bugs": {
+    "url": "https://github.com/amkraev697642/jslt-js/issues"
+  },
+  "keywords": [
+    "jslt",
+    "json",
+    "transform",
+    "transformation",
+    "query",
+    "jq",
+    "jackson",
+    "port"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "type": "module",
+  "main": "./dist/jslt.cjs",
+  "exports": {
+    ".": {
+      "import": "./src/index.js",
+      "require": "./dist/jslt.cjs"
+    },
+    "./extensions": {
+      "import": "./src/extensions/index.js",
+      "require": "./dist/jslt.cjs"
+    }
+  },
+  "bin": {
+    "jslt": "./src/cli.js"
+  },
+  "files": [
+    "README.md",
+    "LICENSE",
+    "NOTICE",
+    "CHANGELOG.md",
+    "src",
+    "dist"
+  ],
+  "scripts": {
+    "build": "node scripts/bundle.mjs",
+    "prepublishOnly": "node scripts/bundle.mjs",
+    "test": "node --test",
+    "benchmark": "node scripts/benchmark.mjs"
+  },
+  "devDependencies": {
+    "js-yaml": "^4.1.0",
+    "jslt-node": "^0.0.6"
+  }
+}

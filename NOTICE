@@ -1,0 +1,12 @@
+jslt-js
+Copyright the jslt-js contributors
+
+This product includes software developed as a JavaScript port of JSLT
+(https://github.com/schibsted/jslt), Copyright Schibsted Products & Technology AS,
+licensed under the Apache License, Version 2.0. Every file under src/ carries a
+"// Port of X.java" header pointing at its upstream source file.
+
+The conformance test fixtures under test/resources/ are vendored verbatim from
+schibsted/jslt's core/src/test/resources/ (Apache License, Version 2.0). See
+test/resources/SOURCE.md for the exact upstream commit and why these fixtures
+are the primary correctness contract for this port (parity with the Java engine).
