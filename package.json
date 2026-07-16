@@ -1,6 +1,6 @@
 {
   "name": "jslt-js",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "description": "JavaScript port of Schibsted JSLT — JSON query and transformation language (https://github.com/schibsted/jslt)",
   "license": "Apache-2.0",
   "author": "Anton Kraev",
@@ -27,11 +27,16 @@
   },
   "type": "module",
   "main": "./dist/jslt.cjs",
+  "browser": "./src/index.js",
+  "unpkg": "./dist/jslt-bundle.js",
+  "jsdelivr": "./dist/jslt-bundle.js",
   "exports": {
     ".": {
       "import": "./src/index.js",
-      "require": "./dist/jslt.cjs"
+      "require": "./dist/jslt.cjs",
+      "default": "./src/index.js"
     },
+    "./bundle": "./dist/jslt-bundle.js",
     "./extensions": {
       "import": "./src/extensions/index.js",
       "require": "./dist/jslt.cjs"

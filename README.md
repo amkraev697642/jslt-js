@@ -33,6 +33,20 @@ const result = toJS(expr.applyInput(fromJS({ name: "Alice" })));
 npm install jslt-js          # ESM (Node 18+, browsers)
 ```
 
+**Browser (classic script / `file://` / no bundler):** use the prebuilt IIFE — it sets
+`globalThis.JSLT` (same shape as the ESM API, including `extensions`):
+
+```html
+<script src="https://cdn.jsdelivr.net/npm/jslt-js@0.1.8/dist/jslt-bundle.js"></script>
+<script>
+  const expr = JSLT.compile('{"hi": .name}');
+  console.log(JSLT.toJS(expr.applyInput(JSLT.fromJS({ name: "Ada" }))));
+</script>
+```
+
+Do **not** rely on `https://esm.sh/jslt-js@…?bundle` for browsers — older publishes pulled
+`node:crypto` into the graph. Prefer `dist/jslt-bundle.js` (or ESM from `jslt-js@0.1.8+`).
+
 CJS consumers (`require()`):
 
 ```js
