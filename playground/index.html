@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>JSLT Playground</title>
+<link rel="stylesheet" href="app.css">
+<script type="importmap">
+{ "imports": {
+  "codemirror": "https://esm.sh/codemirror@6.0.2",
+  "@codemirror/state": "https://esm.sh/@codemirror/state@6.7.6",
+  "@codemirror/view": "https://esm.sh/@codemirror/view@6.43.13",
+  "@codemirror/language": "https://esm.sh/@codemirror/language@6.12.4",
+  "@codemirror/lint": "https://esm.sh/@codemirror/lint@6.9.7",
+  "@codemirror/lang-json": "https://esm.sh/@codemirror/lang-json@6.0.2",
+  "jslt-js": "../src/index.js"
+} }
+</script>
+</head>
+<body>
+<header>
+  <b>JSLT Playground</b>
+  <select id="examples" title="Examples"></select>
+  <button id="share">Copy share link</button>
+  <span id="status"></span>
+  <a href="https://github.com/amkraev697642/jslt-js">jslt-js on GitHub</a>
+</header>
+<main>
+  <section><h2>Input JSON</h2><div id="input" class="ed"></div></section>
+  <div class="gutter"></div>
+  <section><h2>JSLT</h2><div id="jslt" class="ed"></div></section>
+  <div class="gutter"></div>
+  <section><h2>Output</h2><div id="output" class="ed"></div></section>
+</main>
+<script type="module" src="app.js"></script>
+</body>
+</html>
