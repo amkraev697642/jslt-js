@@ -1,4 +1,6 @@
 import { basicSetup, EditorView } from "codemirror";
+import { Compartment } from "@codemirror/state";
+import { oneDark } from "@codemirror/theme-one-dark";
 import { json } from "@codemirror/lang-json";
 import { setDiagnostics } from "@codemirror/lint";
 import { compile, fromJS, toJS } from "jslt-js";
@@ -23,13 +25,24 @@ const b64 = {
   },
 };
 
+const theme = new Compartment();
+const root = document.documentElement;
+const isDark = () => root.dataset.theme === "dark";
+const themeExt = () => theme.of(isDark() ? oneDark : []);
+
 let timer;
 const schedule = () => { clearTimeout(timer); timer = setTimeout(run, 250); };
-const editable = [basicSetup, EditorView.updateListener.of((u) => { if (u.docChanged) { schedule(); save(); } })];
+const editable = [basicSetup, themeExt(), EditorView.updateListener.of((u) => { if (u.docChanged) { schedule(); save(); } })];
 
 const input = new EditorView({ parent: $("input"), extensions: [editable, json()] });
 const jslt = new EditorView({ parent: $("jslt"), extensions: [editable, jsltLanguage] });
-const output = new EditorView({ parent: $("output"), extensions: [basicSetup, json(), EditorView.editable.of(false)] });
+const output = new EditorView({ parent: $("output"), extensions: [basicSetup, themeExt(), json(), EditorView.editable.of(false)] });
+
+$("theme").onclick = () => {
+  root.dataset.theme = isDark() ? "light" : "dark";
+  try { localStorage.setItem("jslt-theme", root.dataset.theme); } catch {}
+  [input, jslt, output].forEach((v) => v.dispatch({ effects: theme.reconfigure(isDark() ? oneDark : []) }));
+};
 
 function status(msg, ok) { $("status").textContent = msg; $("status").className = ok ? "ok" : ""; }
 

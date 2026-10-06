@@ -4,6 +4,8 @@ JavaScript port of [JSLT](https://github.com/schibsted/jslt) — the JSON query 
 Faithful translation of the Java engine: same grammar, same builtins, same semantics. 
 Isomorphic (browser + Node.js), zero runtime dependencies.
 
+**[Try it in the playground](https://amkraev697642.github.io/jslt-js/playground/)** — live JSLT editor with syntax highlighting, error markers and shareable links.
+
 ## For Java developers
 
 If you know the Java JSLT library this maps directly:
