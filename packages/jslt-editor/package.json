@@ -1,0 +1,50 @@
+{
+  "name": "jslt-editor",
+  "version": "0.1.0",
+  "description": "Embeddable JSLT editor: highlighting, completion, hover docs, formatting and error markers (built on CodeMirror 6)",
+  "license": "Apache-2.0",
+  "author": "Anton Kraev",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/amkraev697642/jslt-js.git",
+    "directory": "packages/jslt-editor"
+  },
+  "homepage": "https://github.com/amkraev697642/jslt-js/tree/main/packages/jslt-editor#readme",
+  "bugs": {
+    "url": "https://github.com/amkraev697642/jslt-js/issues"
+  },
+  "keywords": ["jslt", "editor", "json", "codemirror", "language-support", "syntax-highlighting", "autocomplete"],
+  "type": "module",
+  "exports": {
+    ".": {
+      "source": "./src/editor.js",
+      "import": "./dist/jslt-editor.js"
+    },
+    "./standalone": "./dist/jslt-editor.standalone.js",
+    "./codemirror": {
+      "source": "./src/cm/index.js",
+      "import": "./dist/jslt-editor-codemirror.js"
+    },
+    "./core": {
+      "source": "./src/core/index.js",
+      "import": "./dist/jslt-editor-core.js"
+    }
+  },
+  "unpkg": "./dist/jslt-editor.standalone.js",
+  "jsdelivr": "./dist/jslt-editor.standalone.js",
+  "files": ["README.md", "LICENSE", "dist"],
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "prepublishOnly": "node scripts/build.mjs"
+  },
+  "peerDependencies": {
+    "@codemirror/language": "^6.0.0",
+    "@codemirror/view": "^6.0.0",
+    "@lezer/highlight": "^1.0.0"
+  },
+  "peerDependenciesMeta": {
+    "@codemirror/language": { "optional": true },
+    "@codemirror/view": { "optional": true },
+    "@lezer/highlight": { "optional": true }
+  }
+}

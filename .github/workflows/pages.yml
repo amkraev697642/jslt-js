@@ -22,9 +22,15 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+      - run: npm ci
+      - run: npm run build:playground
       - run: |
-          mkdir _site
-          cp -r src playground _site/
+          mkdir -p _site/playground
+          cp playground/index.html playground/app.css _site/playground/
+          cp -r playground/dist _site/playground/
           echo '<meta http-equiv="refresh" content="0;url=playground/">' > _site/index.html
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v4

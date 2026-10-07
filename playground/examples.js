@@ -122,6 +122,30 @@ flatten([for (.orders) rows(.)])
 `,
   },
   {
+    name: "Imports & helpers",
+    input: {
+      customer: { first: " Ada", last: "Lovelace " },
+      lines: [{ qty: 2, price: 9.99 }, { qty: 1, price: 5 }],
+    },
+    jslt: `// lib.jslt is a second file (see the tab): call its functions as alias:name(...)
+import "lib.jslt" as lib
+
+{
+  "customer": lib:full-name(.customer),
+  "total": lib:money(sum([for (.lines) .qty * .price]))
+}
+`,
+    files: [{
+      name: "lib.jslt",
+      text: `def full-name(p)
+  trim($p.first) + " " + trim($p.last)
+
+def money(n)
+  string(round($n * 100) / 100) + " EUR"
+`,
+    }],
+  },
+  {
     name: "Dates",
     input: { created: "2024-03-09 14:30:00" },
     jslt: `let t = parse-time(.created, "yyyy-MM-dd HH:mm:ss")
