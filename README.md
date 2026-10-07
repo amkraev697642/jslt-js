@@ -188,7 +188,7 @@ All upstream conformance fixtures pass with 0 skips. The YAML fixtures require `
 
 ## Ecosystem
 
-JSLT has a small but varied ecosystem. Everything here is third-party unless marked **(this repo)**; statuses are as of October 2026, so see each project for its current state.
+JSLT has a small but varied ecosystem, made by several authors, including this port's. Statuses are as of October 2026, so see each project for its current state.
 
 ### Implementations
 
@@ -199,23 +199,18 @@ JSLT has a small but varied ecosystem. Everything here is third-party unless mar
 | [jslt2](https://github.com/tonysparks/jslt2) | Java | A VM-based implementation, mentioned in the upstream README. |
 | [jslt-node](https://www.npmjs.com/package/jslt-node) | Rust, Node bindings | A native N-API addon over a Rust implementation; its README calls it a proof of concept. |
 
-### Editors and IDEs
+### Tooling and IDE plugins
 
-| Editor | What is available |
-|---|---|
-| Visual Studio Code and forks (Cursor, VSCodium) | **[vscode-jslt](https://github.com/amkraev697642/vscode-jslt)**: highlighting, live error checking, completion, hover docs, formatting, snippets, and "JSLT: Apply to JSON File…". Not on a marketplace yet; the repo builds the `.vsix`. Also [jslt-lang](https://marketplace.visualstudio.com/items?itemName=jarno-rajala.jslt-lang), a syntax highlighter on the Visual Studio Marketplace. |
-| TextMate | **[jslt.tmbundle](https://github.com/amkraev697642/jslt.tmbundle)**: highlighting, symbol list, snippets, Check Syntax and Apply to JSON. Install with `git clone https://github.com/amkraev697642/jslt.tmbundle.git ~/Library/"Application Support"/TextMate/Bundles/JSLT.tmbundle`. |
-| IntelliJ IDEs | [jslt-intellij-plugin](https://github.com/fuchsst/jslt-intellij-plugin). |
-| Editors that speak the Language Server Protocol | **[jslt-language-server](https://github.com/amkraev697642/jslt-language-server)**: diagnostics, completion, hover and formatting over stdio. Not on npm yet. |
-| Web pages | **[jslt-editor](https://github.com/amkraev697642/jslt-editor)** (on npm): an embeddable CodeMirror 6 editor with highlighting, completion, hover docs, formatting and error markers. |
-| Python and documentation tools | [Pygments](https://pygments.org/) ships a JSLT lexer for `.jslt` files. |
 
-The VS Code extension and the TextMate bundle share one grammar and one snippet list with the web editor, generated from `jslt-editor/core`, so the tools highlight and complete the same way.
-
-### Try it online
-
-- **[jslt-playground](https://github.com/amkraev697642/jslt-playground)** ([open it](https://amkraev697642.github.io/jslt-playground/)): runs entirely in your browser, with tabs for imports, JSON or XML input and output, and shareable links.
-- The upstream project's [demo playground](http://www.garshol.priv.no/jslt-demo), which runs the Java engine on a server.
+- **[JSLT demo](http://www.garshol.priv.no/jslt-demo)** ([source](https://github.com/schibsted/jslt/tree/master/playground)): the upstream project's playground, which runs the Java engine on a server
+- **[jslt-editor](https://github.com/amkraev697642/jslt-editor)**: an embeddable CodeMirror 6 editor with highlighting, completion, hover docs, formatting and error markers.
+- **[jslt-intellij-plugin](https://github.com/fuchsst/jslt-intellij-plugin)**: IntelliJ IDEs; highlighting, navigation, rename, validations and an execution dialog.
+- **[jslt-lang](https://marketplace.visualstudio.com/items?itemName=jarno-rajala.jslt-lang)**: syntax highlighting for Visual Studio Code, on the Visual Studio Marketplace.
+- **[jslt-language-server](https://github.com/amkraev697642/jslt-language-server)**: LSP server (diagnostics, completion, hover, formatting) for any editor that uses LSP.
+- **[jslt-playground](https://github.com/amkraev697642/jslt-playground)** ([open it](https://amkraev697642.github.io/jslt-playground/)): Pure JS implementation, runs in your browser, with tabs for imports, JSON or XML input and output, and shareable links.
+- **[jslt.tmbundle](https://github.com/amkraev697642/jslt.tmbundle)**: TextMate; highlighting, symbol list, snippets, "Check Syntax" and "Apply to JSON" actions.
+- **[Pygments](https://pygments.org/)**: ships a JSLT lexer for `.jslt` files, for Python and documentation tools.
+- **[vscode-jslt](https://github.com/amkraev697642/vscode-jslt)**: Visual Studio Code and forks (Cursor, VSCodium); highlighting, live error checking, completion, hover docs, formatting, snippets and "JSLT: Apply to JSON File…".
 
 ### Used with the Java library
 
