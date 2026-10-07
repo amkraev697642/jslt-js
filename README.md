@@ -4,7 +4,7 @@ JavaScript port of [JSLT](https://github.com/schibsted/jslt) — the JSON query 
 Faithful translation of the Java engine: same grammar, same builtins, same semantics. 
 Isomorphic (browser + Node.js), zero runtime dependencies.
 
-**[Try it in the playground](https://amkraev697642.github.io/jslt-js/playground/)** — live JSLT editor with syntax highlighting, error markers and shareable links.
+**[Try it in the playground](https://amkraev697642.github.io/jslt-playground/)** — live JSLT editor with syntax highlighting, error markers and shareable links.
 
 ## For Java developers
 
@@ -185,3 +185,42 @@ All upstream conformance fixtures pass with 0 skips. The YAML fixtures require `
   getMaxArguments, call}` is already a JSLT function, no wrapper needed.
 - **`parse-url`**: implemented via WHATWG URL. Omits `path` when the original URL has no explicit path (matches `java.net.URL.getPath()` returning `""`).
 - Deferred from the Java API: `ClasspathResourceResolver`, `FileSystemResourceResolver` (use the `resolver` option instead), and the REPL/playground.
+
+## Ecosystem
+
+JSLT has a small but varied ecosystem. Everything here is third-party unless marked **(this repo)**; statuses are as of October 2026, so see each project for its current state.
+
+### Implementations
+
+| Project | Language | Notes |
+|---|---|---|
+| [schibsted/jslt](https://github.com/schibsted/jslt) | Java | The reference implementation and language definition. This port tracks its conformance fixtures. |
+| **jslt-js** (this repo) | JavaScript | Pure JavaScript for browsers and Node, no native code; passes the upstream conformance suite. |
+| [jslt2](https://github.com/tonysparks/jslt2) | Java | A VM-based implementation, mentioned in the upstream README. |
+| [jslt-node](https://www.npmjs.com/package/jslt-node) | Rust, Node bindings | A native N-API addon over a Rust implementation; its README calls it a proof of concept. |
+
+### Editors and IDEs
+
+| Editor | What is available |
+|---|---|
+| Visual Studio Code and forks (Cursor, VSCodium) | **[vscode-jslt](https://github.com/amkraev697642/vscode-jslt)**: highlighting, live error checking, completion, hover docs, formatting, snippets, and "JSLT: Apply to JSON File…". Not on a marketplace yet; the repo builds the `.vsix`. Also [jslt-lang](https://marketplace.visualstudio.com/items?itemName=jarno-rajala.jslt-lang), a syntax highlighter on the Visual Studio Marketplace. |
+| TextMate | **[jslt.tmbundle](https://github.com/amkraev697642/jslt.tmbundle)**: highlighting, symbol list, snippets, Check Syntax and Apply to JSON. Install with `git clone https://github.com/amkraev697642/jslt.tmbundle.git ~/Library/"Application Support"/TextMate/Bundles/JSLT.tmbundle`. |
+| IntelliJ IDEs | [jslt-intellij-plugin](https://github.com/fuchsst/jslt-intellij-plugin). |
+| Editors that speak the Language Server Protocol | **[jslt-language-server](https://github.com/amkraev697642/jslt-language-server)**: diagnostics, completion, hover and formatting over stdio. Not on npm yet. |
+| Web pages | **[jslt-editor](https://github.com/amkraev697642/jslt-editor)** (on npm): an embeddable CodeMirror 6 editor with highlighting, completion, hover docs, formatting and error markers. |
+| Python and documentation tools | [Pygments](https://pygments.org/) ships a JSLT lexer for `.jslt` files. |
+
+The VS Code extension and the TextMate bundle share one grammar and one snippet list with the web editor, generated from `jslt-editor/core`, so the tools highlight and complete the same way.
+
+### Try it online
+
+- **[jslt-playground](https://github.com/amkraev697642/jslt-playground)** ([open it](https://amkraev697642.github.io/jslt-playground/)): runs entirely in your browser, with tabs for imports, JSON or XML input and output, and shareable links.
+- The upstream project's [demo playground](http://www.garshol.priv.no/jslt-demo), which runs the Java engine on a server.
+
+### Used with the Java library
+
+Listed in the [upstream README](https://github.com/schibsted/jslt#more-information): the [Apache Camel JSLT component](https://camel.apache.org/components/latest/jslt-component.html), [Apache NiFi](https://nifi.apache.org/) as a processor, [Kafka Connect transforms at Willhaben.at](https://tech.willhaben.at/kafka-connect-custom-single-message-transform-using-jslt-2fc57ae98395), [IBM Cloud Pak for Business Automation](https://www.ibm.com/docs/en/cloud-paks/cp-biz-automation/21.0.x?topic=specification-event-selectors-transformers) and the [Pincette event sourcing framework](https://github.com/json-event-sourcing/pincette-jes).
+
+### Learn more
+
+[A talk on the language design](https://vimeo.com/289470470) ([slides](https://www.slideshare.net/larsga/jslt-json-querying-and-transformation)) and [a paper](https://arxiv.org/abs/1908.10754) describing, among other things, how Schibsted uses JSLT.

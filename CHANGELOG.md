@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.3.0
+
+- Version aligned with the editor tooling (`jslt-editor`, `jslt-language-server`, `vscode-jslt`, `jslt.tmbundle`, `jslt-playground`), which now live in their own repositories. README and package links updated. No engine changes.
+
 ## 0.1.8
 
 - **Browser / CDN fix:** remove the static `node:crypto` import from `cryptoGlobal.js`.
